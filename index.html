@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>XEWA</title>
+	<link rel="stylesheet" href="css/font_awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/onsenui.min.css">
+	<link rel="stylesheet" href="css/onsen-css-components.min.css">
+	<link rel="stylesheet" href="css/user.css">
+	<script src="js/onsenui.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+</head>
+<body>
+	<ons-navigator swipeable id="myNavigator">
+		
+	</ons-navigator>
+
+	<template id="landing.html">
+		<ons-page id="landing">
+			<ons-toolbar>
+				<div class="center">Admin Dashboard</div>
+			</ons-toolbar>
+
+			<ons-tabbar swipeable position="bottom">
+				<ons-tab page="home.html" label="Home" icon="md-home" active></ons-tab>
+				<ons-tab page="costume.html" label="Costume" icon="md-male-female"></ons-tab>
+				<ons-tab page="transaction.html" label="Transaction" icon="md-assignment"></ons-tab>
+				<ons-tab page="history.html" label="History" icon="md-time-restore"></ons-tab>
+			</ons-tabbar>
+		</ons-page>
+	</template>
+
+	<template id="home.html">
+		<ons-page id="home">
+			<div style="height: 200px; padding: 1px 0 0 0;">
+				<ons-card>
+					<div class="title">
+						<ons-icon icon="md-male-female" class="list-item__icon"></ons-icon>
+						Kostum Anda
+					</div>
+					<div class="content">
+						Anda memiliki <b>n</b> kostum tersedia.
+						<br>
+						<b>n</b> kostum sedang disewa.
+						<br>
+						<a href="#" onclick="document.querySelector('ons-tabbar').setActiveTab(1);">Lihat detail &rarr;</a>
+					</div>
+				</ons-card>
+				<ons-card>
+					<div class="title">
+						<ons-icon icon="md-assignment" class="list-item__icon"></ons-icon>
+						Transaksi
+					</div>
+					<div class="content">
+						Anda memiliki <b>n</b> transaksi yang belum ditindaklanjuti.
+						<br>
+						<a href="#" onclick="document.querySelector('ons-tabbar').setActiveTab(2);">Lihat detail &rarr;</a>
+					</div>
+				</ons-card>
+				<ons-card>
+					<div class="title">
+						<ons-icon icon="md-time-restore" class="list-item__icon"></ons-icon>
+						Histori
+					</div>
+					<div class="content">
+						Minggu ini ada <b>n</b> transaksi.
+						<br>
+						<a href="#" onclick="document.querySelector('ons-tabbar').setActiveTab(3);">Lihat detail &rarr;</a>
+					</div>
+				</ons-card>
+			</div>
+		</ons-page>
+	</template>
+
+	<template id="costume.html">
+		<ons-page id="costume">
+			<div class="loaderHolder" id="costumeLoader">
+				<ons-progress-circular indeterminate></ons-progress-circular>
+				<span>Loading data ...</span>
+			</div>
+			<div style="height: 200px; padding: 1px 0 0 0;" id="costumeHolder">
+				
+			</div>
+			<ons-fab position="bottom right" onclick="fn.load('addCostume.html')">
+				<ons-icon icon="md-plus"></ons-icon>
+			</ons-fab>
+		</ons-page>
+	</template>
+
+	<template id="transaction.html">
+		<ons-page id="transaction">
+			<div class="loaderHolder" id="transactionLoader">
+				<ons-progress-circular indeterminate></ons-progress-circular>
+				<span>Loading data ...</span>
+			</div>
+			<div style="height: 200px; padding: 1px 0 0 0;" id="transactionHolder">
+				
+			</div>
+		</ons-page>
+	</template>
+
+	<template id="history.html">
+		<ons-page id="history">
+			<div style="height: 200px; padding: 8px; width: 95%;">
+				<table class="table-fill">
+					<thead>
+						<tr>
+							<th class="text-left">Tx ID</th>
+							<th class="text-left">From</th>
+							<th class="text-left">Date</th>
+							<th class="text-left">Total</th>
+						</tr>
+					</thead>
+					<tbody class="table-hover" id="historyHolder">
+						
+					</tbody>
+				</table>
+			</div>
+			<div class="loaderHolder" id="historyLoader">
+				<ons-progress-circular indeterminate></ons-progress-circular>
+				<span>Loading data ...</span>
+			</div>
+		</ons-page>
+	</template>
+
+	<template id="login.html">
+		<ons-page>
+			<div id="loginBG">
+				<div id="loginFormArea">
+					<div style="text-align: center; margin-top: 30px;">
+						<p>
+							<ons-input id="username" class="loginInput" modifier="underbar" placeholder="Username" float></ons-input>
+						</p>
+						<p>
+							<ons-input id="password" class="loginInput" modifier="underbar" type="password" placeholder="Password" float></ons-input>
+						</p>
+						<p style="margin-top: 30px; padding: 0 25% 0 25%">
+							<ons-button id="loginButton" modifier="large" onclick="verify();">Sign in</ons-button>
+						</p>
+					</div>
+				</div>
+			</div>
+		</ons-page>
+	</template>
+
+	<template id="addCostume.html">
+		<ons-page id="addCostume">
+			<ons-toolbar>
+				<div class="left"><ons-back-button>Page 1</ons-back-button></div>
+				<div class="center">Add Costume</div>
+			</ons-toolbar>
+
+			<ons-card>
+				<ons-row style="margin-bottom: 10px;">
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						Nama Kostum
+					</ons-col>
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						<ons-input id="newCostumeName" modifier="underbar" float></ons-input>
+					</ons-col>
+				</ons-row>
+				<ons-row style="margin-bottom: 10px;">
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						Stok
+					</ons-col>
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						<ons-input id="newCostumeStock" modifier="underbar" float type="number" min="1"></ons-input>
+					</ons-col>
+				</ons-row>
+				<ons-row style="margin-bottom: 10px;">
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						Link Gambar
+					</ons-col>
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						<ons-input id="newCostumeImageLink" modifier="underbar" float></ons-input>
+					</ons-col>
+				</ons-row>
+				<ons-row style="margin-bottom: 10px;">
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						Deskripsi
+					</ons-col>
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						<ons-input id="newCostumeDescription" modifier="underbar" float></ons-input>
+					</ons-col>
+				</ons-row>
+				<ons-row style="margin-bottom: 10px;">
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						Gender
+					</ons-col>
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						<ons-list>
+							<ons-list-item tappable>
+								<label class="left">
+									<ons-radio name="newCostumeGender" input-id="genderF" value="F" checked></ons-radio>
+								</label>
+								<label for="genderF" class="center">
+									Female
+								</label>
+							</ons-list-item>
+							<ons-list-item tappable>
+								<label class="left">
+									<ons-radio name="newCostumeGender" input-id="genderM" value="M"></ons-radio>
+								</label>
+								<label for="genderM" class="center">
+									Male
+								</label>
+							</ons-list-item>
+							<ons-list-item tappable>
+								<label class="left">
+									<ons-radio name="newCostumeGender" input-id="genderU" value="U"></ons-radio>
+								</label>
+								<label for="genderU" class="center">
+									Unisex
+								</label>
+							</ons-list-item>
+						</ons-list>
+					</ons-col>
+				</ons-row>
+				<ons-row style="margin-bottom: 10px;">
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						Size
+					</ons-col>
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						<ons-list>
+							<ons-list-item tappable>
+								<label class="left">
+									<ons-radio name="newCostumeSize" input-id="sizeS" value="S" checked></ons-radio>
+								</label>
+								<label for="sizeS" class="center">
+									S (Small)
+								</label>
+							</ons-list-item>
+							<ons-list-item tappable>
+								<label class="left">
+									<ons-radio name="newCostumeSize" input-id="sizeM" value="M"></ons-radio>
+								</label>
+								<label for="sizeM" class="center">
+									M (Medium)
+								</label>
+							</ons-list-item>
+							<ons-list-item tappable>
+								<label class="left">
+									<ons-radio name="newCostumeSize" input-id="sizeL" value="L"></ons-radio>
+								</label>
+								<label for="sizeL" class="center">
+									L (Large)
+								</label>
+							</ons-list-item>
+							<ons-list-item tappable>
+								<label class="left">
+									<ons-radio name="newCostumeSize" input-id="sizeXL" value="XL"></ons-radio>
+								</label>
+								<label for="sizeXL" class="center">
+									XL (Extra Large)
+								</label>
+							</ons-list-item>
+						</ons-list>
+					</ons-col>
+				</ons-row>
+				<ons-row style="margin-bottom: 10px;">
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						Harga Sewa
+					</ons-col>
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						<ons-input id="newCostumePrice" modifier="underbar" float type="number"></ons-input>
+					</ons-col>
+				</ons-row>
+				<ons-row style="margin-bottom: 10px;">
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+					</ons-col>
+					<ons-col style='padding-left: 5px;' class='resultSection'>
+						<ons-button id="addCostumeButton" modifier="large" onclick="addCostume();">Simpan</ons-button>
+					</ons-col>
+				</ons-row>
+			</ons-card>
+		</ons-page>
+	</template>
+
+	<template id="detailCostume.html">
+		<ons-page id="detailCostume">
+			<ons-toolbar>
+				<div class="left"><ons-back-button>Page 1</ons-back-button></div>
+				<div class="center">Detail Costume</div>
+			</ons-toolbar>
+
+			<div class="loaderHolder" id="detailCostumeLoader">
+				<ons-progress-circular indeterminate></ons-progress-circular>
+				<span>Loading data ...</span>
+			</div>
+			<div style="height: 200px; padding: 1px 0 0 0;" id="detailCostumeHolder">
+				
+			</div>
+		</ons-page>
+	</template>
+
+	<template id="detailTransaction.html">
+		<ons-page id="detailTransaction">
+			<ons-toolbar>
+				<div class="left"><ons-back-button>Page 1</ons-back-button></div>
+				<div class="center">Detail Transaction</div>
+			</ons-toolbar>
+
+			<div class="loaderHolder" id="detailTransactionLoader">
+				<ons-progress-circular indeterminate></ons-progress-circular>
+				<span>Loading data ...</span>
+			</div>
+			<div style="height: 200px; padding: 1px 0 0 0;" id="detailTransactionHolder">
+				
+			</div>
+		</ons-page>
+	</template>
+
+	<template id="editCostume.html">
+		<ons-page id="editCostume">
+			<ons-toolbar>
+				<div class="left"><ons-back-button>Page 1</ons-back-button></div>
+				<div class="center">Edit Costume</div>
+			</ons-toolbar>
+
+			<div id="editCostumeHolder">
+				
+			</div>
+		</ons-page>
+	</template>
+	<script src="js/main.js"></script>
+</body>
+</html>
