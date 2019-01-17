@@ -17,6 +17,7 @@ window.fn.load = function(page, id) {
 					getCostume();
 					getTransaction();
 					getHistory();
+					getProfile(loginAs);
 				}
 			});
 		} else if (page == 'editCostume.html') {
@@ -40,6 +41,8 @@ if (window.openDatabase) {
 	alert("WebSQL tidak didukung oleh browser ini");
 }
 
+var loginAs = "";
+
 function verify() {
 	username = $("#username").val();
 	password = $("#password").val();
@@ -59,6 +62,8 @@ function verify() {
 					alert("Database tidak ditemukan, browser tidak mendukung WebSQL");
 				}
 
+				loginAs = username;
+
 				fn.load('landing.html');
 			} else {
 				ons.notification.alert("Login gagal");
@@ -75,6 +80,7 @@ function isLoggedIn() {
 		mydb.transaction(function (t) {
 			t.executeSql("SELECT * FROM providerloggedin LIMIT 1", [], function (transaction, results) {
 				if (results.rows.item(0).isLoggedIn == 'true') {
+					loginAs = results.rows.item(0).username;
 					fn.load('landing.html');
 				} else {
 					fn.load('login.html');
@@ -671,4 +677,57 @@ function updateTransactionStatus(id, status, track_no) {
 			console.log(err);
 		}
 	});
+}
+
+function getProfile(username) {
+	var url = `${serviceHost}/get_profile.php?username=${username}&type=provider`;
+	$.ajax({
+		url: url,
+		method: 'GET',
+		dataType: 'JSON',
+		success: function (res) {
+			var print = "";
+			var profile = res.profile;
+
+			print += `
+					<ons-card>
+						<div class="title">
+								${profile[0].username}
+							</div>
+							<ons-row>
+								<ons-col style='padding-left: 5px;' class='resultSection'>
+									<div>Username :</div>
+									<div>Email :</div>
+									<div>Phone :</div>
+									<div>Address :</div>
+								</ons-col>
+								<ons-col style='padding-left: 5px;' class='resultSection'>
+									<div class='profileUsername'>${profile[0].username}</div>
+									<div class='profileEmail'>${profile[0].email}</div>
+									<div class='profilePhone'>${profile[0].phone}</div>
+								</ons-col>
+							</ons-row>
+							<ons-row>
+								<ons-col>
+									<ons-button modifier="large" onclick="logout()">Sign Out</ons-button>
+								</ons-col>
+							</ons-row>
+					</ons-card>
+			`;
+			document.getElementById("profileHolder").innerHTML = print;
+			document.getElementById("profileLoader").style.display = "none";
+		},
+
+		error: function (err) {
+			console.log(err);
+		}
+	});
+}
+
+function logout() {
+	mydb.transaction(function (t) {
+		t.executeSql(`DELETE FROM providerloggedin WHERE username='${loginAs}'`);
+	});
+
+	document.getElementById('myNavigator').resetToPage('login.html');
 }

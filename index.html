@@ -25,6 +25,7 @@
 				<ons-tab page="costume.html" label="Costume" icon="md-male-female"></ons-tab>
 				<ons-tab page="transaction.html" label="Transaction" icon="md-assignment"></ons-tab>
 				<ons-tab page="history.html" label="History" icon="md-time-restore"></ons-tab>
+				<ons-tab page="profile.html" label="Profile" icon="md-account"></ons-tab>
 			</ons-tabbar>
 		</ons-page>
 	</template>
@@ -317,6 +318,18 @@
 			</ons-toolbar>
 
 			<div id="editCostumeHolder">
+				
+			</div>
+		</ons-page>
+	</template>
+
+	<template id="profile.html">
+		<ons-page id="profile">
+			<div class="loaderHolder" id="profileLoader">
+				<ons-progress-circular indeterminate></ons-progress-circular>
+				<span>Loading data ...</span>
+			</div>
+			<div style="height: 200px; padding: 1px 0 0 0;" id="profileHolder">
 				
 			</div>
 		</ons-page>
